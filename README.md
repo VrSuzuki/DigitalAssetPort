@@ -33,7 +33,6 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 ## ローカル起動
 
 ```bash
-cd /home/ubuntuiwa/e/c/DigitalAssetsPort
 docker compose up -d --build
 docker compose exec php composer install
 docker compose exec php php artisan storage:link
