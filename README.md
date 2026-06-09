@@ -9,7 +9,7 @@
 ![MailHog](https://img.shields.io/badge/Mail-MailHog-29B6F6)
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%20%2F%20CSS%20%2F%20JavaScript-F7DF1E?logo=javascript&logoColor=111)
 
-DigitalAssetPort は、テンプレート、教材、コード、画像、音声、動画、3Dモデルなどのデジタルデータを販売・配布できるローカル完結型のフリマECポートフォリオです。
+DigitalAssetPort は、テンプレート、教材、コード、画像、音声、動画、3Dモデルなどのデジタルデータを販売・配布できるローカル完結型のフリマECサイトです。
 
 ## 主な機能
 
