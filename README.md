@@ -13,7 +13,7 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 
 ## スクリーンショット
 <img width="1599" height="2404" alt="1_トップページ" src="https://github.com/user-attachments/assets/5596b223-017d-40f4-a028-d644a1ffdc92" />
-[画面一覧はこちら](https://github.com/VrSuzuki/DigitalAssetPort_FleaMarketApp/blob/main/ScreanShotTable.md)
+[画面一覧はこちら](ScreanShotTable.md)
 
 ## 主な機能
 
