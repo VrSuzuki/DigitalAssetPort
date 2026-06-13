@@ -10,7 +10,9 @@
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%20%2F%20CSS%20%2F%20JavaScript-F7DF1E?logo=javascript&logoColor=111)
 
 DigitalAssetPort は、テンプレート、教材、コード、画像、音声、動画、3Dモデルなどのデジタルデータを販売・配布できるローカル完結型のフリマECサイトです。  
+個人的なLaravelの学習目的で作成しました。  
   
+## 背景
 2024年頃にLaravelの学習用途でフリマWebアプリを作成したのですが、粗削りな部分もあったため、Laravelの復習も兼ねて0から作り直し、公開できるような形にまで改善しました。
 
 ## スクリーンショット
