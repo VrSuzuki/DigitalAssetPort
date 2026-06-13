@@ -31,8 +31,7 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 - Seederによるデモユーザー、コンテンツ、購入、レビュー、通知、お気に入り、フォローの再生成
 
 ## ローカル起動
-
-
+プルした「DisitalAssetPort」ディレクトリ直下で以下のコマンドを実行することで、ローカルで動くWebアプリが作成・起動されます。
 ```bash
 docker compose up -d --build
 docker compose exec php composer install
@@ -41,6 +40,11 @@ docker compose exec php php artisan migrate:fresh --seed
 docker compose exec php php artisan key:generate
 docker compose exec php php artisan migrate
 docker compose exec php php artisan db:seed
+```
+もしもブラウザ(`http://localhost/`)にて権限に関するエラーが表示されていた場合は以下のコマンドを「DisitalAssetPort」ディレクトリ直下で実行してみてください。
+
+```
+docker compose exec php chmod -R 775 storage bootstrap/cache
 ```
 
 ## サンプルアカウント
