@@ -30,7 +30,14 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 - レスポンシブ対応、Material Symbolsアイコン、ローカルSVGアバター、カスタムページネーション
 - Seederによるデモユーザー、コンテンツ、購入、レビュー、通知、お気に入り、フォローの再生成
 
-## ローカル起動
+## ローカルでの本Webアプリの構築・起動
+### 前提条件
+本Webアプリを構築・起動するには以下が必要です。
+- Docker Desktop
+- Docker Compose
+- WSL2 + Ubuntu（※Windows環境の場合）
+
+### 構築・起動する手順
 プルした「DisitalAssetPort」ディレクトリ直下で以下のコマンドを実行することで、ローカルで動くWebアプリが作成・起動されます。
 ```bash
 docker compose up -d --build
@@ -38,8 +45,6 @@ docker compose exec php composer install
 docker compose exec php php artisan storage:link
 docker compose exec php php artisan migrate:fresh --seed
 docker compose exec php php artisan key:generate
-docker compose exec php php artisan migrate
-docker compose exec php php artisan db:seed
 ```
 もしもブラウザ(`http://localhost/`)にて権限に関するエラーが表示されていた場合は以下のコマンドを「DisitalAssetPort」ディレクトリ直下で実行してみてください。
 
