@@ -38,7 +38,7 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 - WSL2 + Ubuntu（※Windows環境の場合）
 
 ### 構築・起動する手順
-プルした「DisitalAssetPort」ディレクトリ直下で以下のコマンドを実行することで、ローカルで動くWebアプリが作成・起動されます。
+pullした「DisitalAssetPort」ディレクトリ直下で以下のコマンドを実行することで、ローカルで動くWebアプリが作成・起動されます。
 ```bash
 docker compose up -d --build
 docker compose exec php composer install
