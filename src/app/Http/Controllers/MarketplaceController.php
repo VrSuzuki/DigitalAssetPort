@@ -17,8 +17,9 @@ class MarketplaceController extends Controller
     {
         return view('marketplace.index', [
             'contents' => $this->contentQuery($request)->paginate($this->perPage($request))->withQueryString(),
-            'genres' => Genre::with('subGenres')->withCount('contents')->get(),
-            'authors' => User::withCount('contents')->orderByDesc('contents_count')->take(8)->get(),
+            'genres' => Genre::with('subGenres')->withCount('contents')->orderByDesc('contents_count')->get(),
+            'authors' => User::whereHas('contents')->withCount('contents')->orderByDesc('contents_count')->get(),
+            'followingUsers' => $this->followingUsers(),
             'formats' => $this->formats(),
             'sorts' => $this->sorts(),
             'activeFilters' => $this->activeFilters($request),
@@ -190,6 +191,19 @@ class MarketplaceController extends Controller
         $perPage = (int) $request->input('per_page', 20);
 
         return in_array($perPage, [20, 50, 100], true) ? $perPage : 20;
+    }
+
+    private function followingUsers()
+    {
+        if (!auth()->check()) {
+            return collect();
+        }
+
+        return auth()->user()
+            ->following()
+            ->withCount('contents')
+            ->orderByDesc('contents_count')
+            ->get();
     }
 
     private function formats()

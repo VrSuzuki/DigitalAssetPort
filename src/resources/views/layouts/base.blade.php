@@ -25,8 +25,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-  <script defer src="{{ asset('js/app.js') }}"></script>
+  <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
+  <script defer src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}"></script>
   @stack('styles')
 </head>
 <body class="@yield('body_class')">

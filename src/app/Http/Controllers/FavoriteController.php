@@ -25,6 +25,14 @@ class FavoriteController extends Controller
             $message = 'お気に入りに追加しました。';
         }
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'favorited' => !$favorite,
+                'count' => $content->favorites()->count(),
+                'message' => $message,
+            ]);
+        }
+
         return back()->with('status', $message);
     }
 }

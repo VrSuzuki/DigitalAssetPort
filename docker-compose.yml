@@ -11,6 +11,9 @@ services:
 
   php:
     build: ./docker/php
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     volumes:
       - ./src:/var/www/
 

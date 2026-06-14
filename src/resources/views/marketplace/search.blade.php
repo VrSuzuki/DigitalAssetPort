@@ -47,10 +47,10 @@
         </div>
         <div class="field">
           <label for="sub_genre">サブジャンル</label>
-          <select class="select" id="sub_genre" name="sub_genre">
+          <select class="select" id="sub_genre" name="sub_genre" data-subgenre-select data-parent-select="genre">
             <option value="">すべて</option>
             @foreach($subGenres as $subGenre)
-              <option value="{{ $subGenre->id }}" {{ (int) request('sub_genre') === $subGenre->id ? 'selected' : '' }}>{{ $subGenre->genre->name }} / {{ $subGenre->name }}</option>
+              <option value="{{ $subGenre->id }}" data-genre-id="{{ $subGenre->genre_id }}" {{ (int) request('sub_genre') === $subGenre->id ? 'selected' : '' }}>{{ $subGenre->name }}</option>
             @endforeach
           </select>
         </div>

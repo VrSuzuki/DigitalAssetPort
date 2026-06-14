@@ -143,11 +143,11 @@
 
           <div class="form-actions" style="margin-top: 18px;">
             @auth
-              <form method="POST" action="{{ route('favorites.toggle', $content) }}">
+              <form method="POST" action="{{ route('favorites.toggle', $content) }}" data-favorite-form>
                 @csrf
-                <button class="favorite-pill favorite-pill--large {{ $isFavorite ? 'is-active' : '' }}" type="submit" aria-label="お気に入り">
-                  <span class="material-symbols-outlined" aria-hidden="true">{{ $isFavorite ? 'favorite' : 'favorite_border' }}</span>
-                  {{ number_format($content->favorites_count) }}
+                <button class="favorite-pill favorite-pill--large {{ $isFavorite ? 'is-active' : '' }}" type="submit" aria-label="お気に入り" data-favorite-button data-content-id="{{ $content->id }}" data-active-icon="{{ asset('assets/icons/favorite-on.svg') }}" data-inactive-icon="{{ asset('assets/icons/favorite-off.svg') }}">
+                  <img class="favorite-icon" src="{{ asset($isFavorite ? 'assets/icons/favorite-on.svg' : 'assets/icons/favorite-off.svg') }}" alt="" data-favorite-icon>
+                  <span data-favorite-count>{{ number_format($content->favorites_count) }}</span>
                 </button>
               </form>
               @if($content->user_id === auth()->id())

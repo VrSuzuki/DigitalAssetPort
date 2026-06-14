@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
+use Throwable;
 
 class GoogleAuthController extends Controller
 {
@@ -24,8 +26,27 @@ class GoogleAuthController extends Controller
 
     public function callback()
     {
-        $googleUser = Socialite::driver('google')->user();
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (InvalidStateException $exception) {
+            return redirect()
+                ->route('login')
+                ->withErrors(['google' => 'Google認証のセッションが切れました。もう一度Googleアカウントでログインしてください。']);
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return redirect()
+                ->route('login')
+                ->withErrors(['google' => 'Google認証サーバーに接続できませんでした。Dockerを再起動してからもう一度お試しください。']);
+        }
+
         $email = Str::lower($googleUser->getEmail());
+
+        if (!$email) {
+            return redirect()
+                ->route('login')
+                ->withErrors(['google' => 'Googleアカウントからメールアドレスを取得できませんでした。メール公開設定を確認してください。']);
+        }
 
         $user = User::where('google_id', $googleUser->getId())
             ->orWhere('email', $email)
@@ -45,15 +66,18 @@ class GoogleAuthController extends Controller
                 'email' => $email,
                 'google_id' => $googleUser->getId(),
                 'google_avatar_url' => $googleUser->getAvatar(),
-                'email_verified_at' => now(),
                 'password' => Hash::make(Str::random(40)),
             ]);
+
+            $user->forceFill(['email_verified_at' => now()])->save();
         }
 
         Auth::login($user, true);
         request()->session()->regenerate();
 
-        return redirect()->intended(route('profiles.edit'));
+        return redirect()
+            ->route('profiles.edit')
+            ->with('status', 'Googleアカウント認証が完了しました。プロフィールを設定してください。');
     }
 
     private function uniqueHandle(?string $name, string $email): string
