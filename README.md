@@ -11,15 +11,19 @@
 ![Ubuntu](https://img.shields.io/badge/Ubuntu%20%2F%20WSL2-E95420?logo=ubuntu&logoColor=white)
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%20%2F%20CSS%20%2F%20JavaScript-F7DF1E?logo=javascript&logoColor=111)
 
-DigitalAssetPort は、テンプレート、教材、コード、画像、音声、動画、3Dモデルなどのデジタルデータを販売・配布できるローカル完結型のフリマECサイトです。
+DigitalAssetPort は、テンプレート、教材、コード、画像、音声、動画、3Dモデルなど様々なデジタルデータを販売・配布できるローカル完結型のフリマECサイトです。
  
-個人的なLaravelの学習目的で作成しました。  
+個人的なLaravelの技術検証目的で作成しました。  
+こちらで培った技術をもとに、将来的には※動場(どうば)共有プラットフォームを構築する足掛かりにしていきたいです。
+
+※動場：動きのある3D空間に対して私が呼んでいる造語です。
+  
   
 ## 背景
 2024年頃にLaravelの学習用途でフリマWebアプリを作成したのですが、粗削りな部分もあったため、Laravelの復習も兼ねて0から作り直し、公開できるような形にまで改善しました。
 
 ## スクリーンショット
-[画面のスクリーンショット一覧はこちら](/ScreanShotTable.md)
+[画面のスクリーンショット一覧はこちら](/ScreenShotTable.md)
 <img width="1599" height="2404" alt="1_トップページ" src="https://github.com/user-attachments/assets/5596b223-017d-40f4-a028-d644a1ffdc92" />
 
 ## 主な機能
@@ -48,7 +52,7 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 - WSL2 + Ubuntu（※Windows環境の場合）
 
 ### 構築・起動する手順
-pullした「DisitalAssetPort」ディレクトリ直下で以下のコマンドを実行することで、ローカルで動くWebアプリが作成・起動されます。
+pullした「DigitalAssetPort」ディレクトリ直下で以下のコマンドを実行することで、ローカルで動くWebアプリが作成・起動されます。
 ```bash
 docker compose up -d --build
 docker compose exec php composer install
@@ -60,7 +64,8 @@ docker compose exec php php artisan migrate:fresh --seed
 もしもブラウザ(`http://localhost/`)にて権限に関するエラーが表示されていた場合は以下のコマンドを「DisitalAssetPort」ディレクトリ直下で実行してみてください。
 
 ```
-docker compose exec php chmod -R 777 storage bootstrap/cache
+docker compose exec php chmod -R 775 storage bootstrap/cache
+docker compose exec php chown -R www-data:www-data storage bootstrap/cache
 ```
 
 ## サンプルアカウント
