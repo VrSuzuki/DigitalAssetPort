@@ -78,7 +78,100 @@ document.querySelectorAll('[data-gallery]').forEach(gallery => {
   if (next) next.addEventListener('click', () => show(currentIndex + 1));
 });
 
-const imageTransfers = new WeakMap();
+document.querySelectorAll('[data-collapsible-list]').forEach(list => {
+  const items = [...list.querySelectorAll('[data-collapsible-item]')];
+  const button = list.querySelector('[data-collapsible-toggle]');
+  const collapsedCount = Number(list.dataset.collapsedCount || items.length);
+  let expanded = false;
+
+  const sync = () => {
+    items.forEach((item, index) => {
+      item.hidden = !expanded && index >= collapsedCount;
+    });
+
+    if (button) {
+      button.hidden = items.length <= collapsedCount;
+      button.textContent = expanded ? '閉じる' : 'もっと表示する';
+    }
+  };
+
+  if (button) {
+    button.addEventListener('click', () => {
+      expanded = !expanded;
+      sync();
+    });
+  }
+
+  sync();
+});
+
+document.querySelectorAll('[data-subgenre-select]').forEach(select => {
+  const parent = document.getElementById(select.dataset.parentSelect);
+  if (!parent) return;
+
+  const options = [...select.options];
+  const sync = () => {
+    const genreId = parent.value;
+    let selectedAvailable = false;
+    let firstAvailable = null;
+
+    options.forEach(option => {
+      const isBlank = option.value === '';
+      const available = isBlank || !genreId || option.dataset.genreId === genreId;
+      option.hidden = !available;
+      option.disabled = !available;
+
+      if (available && !isBlank && !firstAvailable) {
+        firstAvailable = option;
+      }
+
+      if (available && option.selected) {
+        selectedAvailable = true;
+      }
+    });
+
+    if (!selectedAvailable) {
+      const blank = options.find(option => option.value === '' && !option.disabled);
+      select.value = blank ? '' : firstAvailable ? firstAvailable.value : '';
+    }
+  };
+
+  parent.addEventListener('change', sync);
+  sync();
+});
+
+document.querySelectorAll('[data-favorite-form]').forEach(form => {
+  form.addEventListener('submit', () => {
+    const button = form.querySelector('[data-favorite-button]');
+    if (!button) return;
+
+    const count = button.querySelector('[data-favorite-count]');
+    const currentCount = Number((count?.textContent || '0').replace(/,/g, '')) || 0;
+    const favorited = !button.classList.contains('is-active');
+    updateFavoriteButtons(button.dataset.contentId, {
+      favorited,
+      count: Math.max(0, currentCount + (favorited ? 1 : -1)),
+    });
+  });
+});
+
+function updateFavoriteButtons(contentId, data) {
+  document.querySelectorAll(`[data-favorite-button][data-content-id="${contentId}"]`).forEach(button => {
+    const icon = button.querySelector('[data-favorite-icon]');
+    const count = button.querySelector('[data-favorite-count]');
+    button.classList.toggle('is-active', data.favorited);
+
+    if (icon) {
+      icon.src = data.favorited ? button.dataset.activeIcon : button.dataset.inactiveIcon;
+    }
+
+    if (count) {
+      count.textContent = Number(data.count || 0).toLocaleString('ja-JP');
+    }
+  });
+}
+
+const imageQueues = new WeakMap();
 
 document.querySelectorAll('[data-image-cropper]').forEach(wrapper => {
   const input = wrapper.querySelector('[data-file-input]');
@@ -110,14 +203,14 @@ document.querySelectorAll('[data-image-repeater]').forEach(wrapper => {
   const input = wrapper.querySelector('[data-file-input]');
   const list = wrapper.querySelector('[data-image-list]');
   const maxImages = Number(wrapper.dataset.maxImages || 20);
-  imageTransfers.set(input, new DataTransfer());
+  imageQueues.set(input, []);
 
   input.addEventListener('change', async () => {
     const files = [...input.files];
-    const transfer = imageTransfers.get(input);
+    const queue = imageQueues.get(input);
 
     for (const file of files) {
-      if (list.children.length >= maxImages) {
+      if (list.querySelectorAll('.image-record').length >= maxImages) {
         alert(`コンテンツ画像は最大${maxImages}枚まで追加できます。`);
         break;
       }
@@ -130,18 +223,37 @@ document.querySelectorAll('[data-image-repeater]').forEach(wrapper => {
 
       if (!cropped) continue;
 
-      transfer.items.add(cropped);
-      const record = document.createElement('div');
-      record.className = 'image-record';
-      record.innerHTML = `<img src="${URL.createObjectURL(cropped)}" alt=""><span>追加画像 ${list.children.length + 1}</span>`;
-      list.appendChild(record);
+      queue.push({
+        file: cropped,
+        url: URL.createObjectURL(cropped),
+      });
+
+      renderImageQueue(input, list);
     }
 
-    input.files = transfer.files;
+    syncImageInput(input);
   });
 });
 
 document.addEventListener('click', event => {
+  const newImageButton = event.target.closest('[data-remove-new-image]');
+
+  if (newImageButton) {
+    const wrapper = newImageButton.closest('[data-image-repeater]');
+    const input = wrapper.querySelector('[data-file-input]');
+    const list = wrapper.querySelector('[data-image-list]');
+    const queue = imageQueues.get(input);
+    const removed = queue.splice(Number(newImageButton.dataset.removeNewImage), 1)[0];
+
+    if (removed) {
+      URL.revokeObjectURL(removed.url);
+    }
+
+    renderImageQueue(input, list);
+    syncImageInput(input);
+    return;
+  }
+
   const button = event.target.closest('[data-delete-image]');
   if (!button) return;
 
@@ -152,8 +264,45 @@ document.addEventListener('click', event => {
   input.name = 'delete_image_ids[]';
   input.value = button.dataset.deleteImage;
   form.appendChild(input);
-  record.remove();
+  if (record) record.remove();
 });
+
+function syncImageInput(input) {
+  const transfer = new DataTransfer();
+  imageQueues.get(input).forEach(item => transfer.items.add(item.file));
+  input.files = transfer.files;
+}
+
+function renderImageQueue(input, list) {
+  list.querySelectorAll('[data-new-image]').forEach(record => record.remove());
+
+  const persistedCount = list.querySelectorAll('.image-record').length;
+  imageQueues.get(input).forEach((item, index) => {
+    const record = document.createElement('div');
+    const image = document.createElement('img');
+    const label = document.createElement('span');
+    const button = document.createElement('button');
+    const icon = document.createElement('span');
+
+    record.className = 'image-record';
+    record.dataset.imageRecord = '';
+    record.dataset.newImage = '';
+    image.src = item.url;
+    image.alt = '';
+    label.textContent = `追加画像 ${persistedCount + index + 1}`;
+    button.className = 'image-record__remove';
+    button.type = 'button';
+    button.dataset.removeNewImage = String(index);
+    button.setAttribute('aria-label', '画像を削除');
+    icon.className = 'material-symbols-outlined';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = 'close';
+
+    button.appendChild(icon);
+    record.append(image, label, button);
+    list.appendChild(record);
+  });
+}
 
 function fixedAspect(value) {
   const aspect = Number(value);

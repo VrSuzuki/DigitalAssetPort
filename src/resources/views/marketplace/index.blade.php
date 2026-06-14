@@ -40,38 +40,50 @@
     <div class="layout-grid">
       <aside class="sidebar" aria-label="サイドメニュー">
         <h2>ジャンル</h2>
-        <div class="side-list">
+        <div class="side-list" data-collapsible-list data-collapsed-count="6">
           @foreach($genres as $genre)
-            <a href="{{ route('home', ['genre' => $genre->id]) }}">
+            <a href="{{ route('home', ['genre' => $genre->id]) }}" data-collapsible-item>
               <span>{{ $genre->name }}</span>
               <strong>{{ $genre->contents_count }}</strong>
             </a>
           @endforeach
+          @if($genres->count() > 6)
+            <button class="side-list__more" type="button" data-collapsible-toggle>もっと表示する</button>
+          @endif
         </div>
 
         <h2 style="margin-top: 24px;">フォロー中</h2>
-        <div class="side-list">
+        <div class="side-list" data-collapsible-list data-collapsed-count="3">
           @auth
-            @forelse(auth()->user()->following()->take(5)->get() as $following)
-              <a href="{{ route('profiles.show', $following) }}">{{ $following->display_name }}</a>
+            @forelse($followingUsers as $following)
+              <a href="{{ route('profiles.show', $following) }}" data-collapsible-item>
+                <span>{{ $following->display_name }}</span>
+                <strong>{{ $following->contents_count }}</strong>
+              </a>
             @empty
               <span>まだフォローはありません。</span>
             @endforelse
+            @if($followingUsers->count() > 3)
+              <button class="side-list__more" type="button" data-collapsible-toggle>もっと表示する</button>
+            @endif
           @else
             <a href="{{ route('login') }}">ログインして表示</a>
           @endauth
         </div>
 
         <h2 style="margin-top: 24px;">投稿者一覧</h2>
-        <div class="side-list">
+        <div class="side-list" data-collapsible-list data-collapsed-count="3">
           @foreach($authors as $author)
             @if($author->handle)
-              <a href="{{ route('profiles.show', $author) }}">
+              <a href="{{ route('profiles.show', $author) }}" data-collapsible-item>
                 <span>{{ $author->display_name }}</span>
                 <strong>{{ $author->contents_count }}</strong>
               </a>
             @endif
           @endforeach
+          @if($authors->count() > 3)
+            <button class="side-list__more" type="button" data-collapsible-toggle>もっと表示する</button>
+          @endif
         </div>
       </aside>
 

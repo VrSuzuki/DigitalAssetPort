@@ -20,7 +20,12 @@
 body {
   min-height: 100vh;
   color: var(--ink);
-  background: var(--page);
+  background-color: var(--page);
+  background-image:
+    linear-gradient(rgba(32, 199, 210, .08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 199, 210, .08) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(75, 220, 168, .12), transparent 42%, rgba(255, 99, 125, .08));
+  background-size: 34px 34px, 34px 34px, 100% 100%;
   font-family: "Noto Sans JP", system-ui, sans-serif;
   line-height: 1.7;
 }
@@ -498,6 +503,20 @@ textarea {
   font-weight: 700;
 }
 
+.side-list__more {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue);
+  background: #eef7ff;
+  border: 1px solid #c8dff6;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
 .content-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -606,8 +625,10 @@ textarea {
   transition: color .16s ease, background .16s ease, border-color .16s ease, transform .16s ease;
 }
 
-.favorite-pill .material-symbols-outlined {
-  font-size: 18px;
+.favorite-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
 }
 
 .favorite-pill.is-active {

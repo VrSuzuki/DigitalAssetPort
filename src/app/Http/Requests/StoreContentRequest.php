@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreContentRequest extends FormRequest
 {
@@ -16,7 +17,10 @@ class StoreContentRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:120'],
             'genre_id' => ['required', 'exists:genres,id'],
-            'sub_genre_id' => ['required', 'exists:sub_genres,id'],
+            'sub_genre_id' => [
+                'required',
+                Rule::exists('sub_genres', 'id')->where('genre_id', $this->input('genre_id')),
+            ],
             'format' => ['required', 'string', 'max:40'],
             'description' => ['required', 'string', 'max:5000'],
             'tags' => ['nullable', 'string', 'max:255'],

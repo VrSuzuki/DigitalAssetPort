@@ -22,16 +22,16 @@
       <span class="price">{{ $content->formatted_price }}</span>
       <span class="rating">{{ $content->rating_label }} / {{ number_format($content->ratings_count) }}件</span>
       @auth
-        <form method="POST" action="{{ route('favorites.toggle', $content) }}">
+        <form method="POST" action="{{ route('favorites.toggle', $content) }}" data-favorite-form>
           @csrf
-          <button class="favorite-pill {{ $isFavorited ? 'is-active' : '' }}" type="submit" aria-label="お気に入り">
-            <span class="material-symbols-outlined" aria-hidden="true">{{ $isFavorited ? 'favorite' : 'favorite_border' }}</span>
-            {{ number_format($favoriteCount) }}
+          <button class="favorite-pill {{ $isFavorited ? 'is-active' : '' }}" type="submit" aria-label="お気に入り" data-favorite-button data-content-id="{{ $content->id }}" data-active-icon="{{ asset('assets/icons/favorite-on.svg') }}" data-inactive-icon="{{ asset('assets/icons/favorite-off.svg') }}">
+            <img class="favorite-icon" src="{{ asset($isFavorited ? 'assets/icons/favorite-on.svg' : 'assets/icons/favorite-off.svg') }}" alt="" data-favorite-icon>
+            <span data-favorite-count>{{ number_format($favoriteCount) }}</span>
           </button>
         </form>
       @else
         <a class="favorite-pill" href="{{ route('login') }}" aria-label="お気に入り">
-          <span class="material-symbols-outlined" aria-hidden="true">favorite_border</span>
+          <img class="favorite-icon" src="{{ asset('assets/icons/favorite-off.svg') }}" alt="">
           {{ number_format($favoriteCount) }}
         </a>
       @endauth

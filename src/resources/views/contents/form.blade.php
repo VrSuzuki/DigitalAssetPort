@@ -39,9 +39,11 @@
           </div>
           <div class="field">
             <label for="sub_genre_id">サブジャンル</label>
-            <select class="select" id="sub_genre_id" name="sub_genre_id">
-              @foreach($subGenres as $subGenre)
-                <option value="{{ $subGenre->id }}" {{ (int) old('sub_genre_id', $content->sub_genre_id) === $subGenre->id ? 'selected' : '' }}>{{ $subGenre->genre->name ?? '' }} / {{ $subGenre->name }}</option>
+            <select class="select" id="sub_genre_id" name="sub_genre_id" data-subgenre-select data-parent-select="genre_id">
+              @foreach($genres as $genre)
+                @foreach($genre->subGenres as $subGenre)
+                  <option value="{{ $subGenre->id }}" data-genre-id="{{ $genre->id }}" {{ (int) old('sub_genre_id', $content->sub_genre_id) === $subGenre->id ? 'selected' : '' }}>{{ $subGenre->name }}</option>
+                @endforeach
               @endforeach
             </select>
           </div>

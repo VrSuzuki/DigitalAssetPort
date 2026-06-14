@@ -53,7 +53,9 @@ class GoogleAuthController extends Controller
         Auth::login($user, true);
         request()->session()->regenerate();
 
-        return redirect()->intended(route('profiles.edit'));
+        return redirect()
+            ->route('profiles.edit')
+            ->with('status', 'Googleアカウント認証が完了しました。プロフィールを設定してください。');
     }
 
     private function uniqueHandle(?string $name, string $email): string
