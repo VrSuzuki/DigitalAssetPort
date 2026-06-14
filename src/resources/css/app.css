@@ -37,6 +37,10 @@ textarea {
   font: inherit;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .material-symbols-outlined {
   font-size: 22px;
   font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
@@ -1120,6 +1124,12 @@ textarea {
 .social-auth-button:hover {
   border-color: var(--cyan);
   box-shadow: 0 0 0 4px rgba(32, 199, 210, .12);
+}
+
+.social-auth-button__icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
 }
 
 .auth-divider {

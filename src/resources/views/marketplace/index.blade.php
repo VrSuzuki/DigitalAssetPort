@@ -42,7 +42,7 @@
         <h2>ジャンル</h2>
         <div class="side-list" data-collapsible-list data-collapsed-count="6">
           @foreach($genres as $genre)
-            <a href="{{ route('home', ['genre' => $genre->id]) }}" data-collapsible-item>
+            <a href="{{ route('home', ['genre' => $genre->id]) }}" data-collapsible-item @if($loop->iteration > 6) hidden @endif>
               <span>{{ $genre->name }}</span>
               <strong>{{ $genre->contents_count }}</strong>
             </a>
@@ -56,7 +56,7 @@
         <div class="side-list" data-collapsible-list data-collapsed-count="3">
           @auth
             @forelse($followingUsers as $following)
-              <a href="{{ route('profiles.show', $following) }}" data-collapsible-item>
+              <a href="{{ route('profiles.show', $following) }}" data-collapsible-item @if($loop->iteration > 3) hidden @endif>
                 <span>{{ $following->display_name }}</span>
                 <strong>{{ $following->contents_count }}</strong>
               </a>
@@ -73,13 +73,11 @@
 
         <h2 style="margin-top: 24px;">投稿者一覧</h2>
         <div class="side-list" data-collapsible-list data-collapsed-count="3">
-          @foreach($authors as $author)
-            @if($author->handle)
-              <a href="{{ route('profiles.show', $author) }}" data-collapsible-item>
-                <span>{{ $author->display_name }}</span>
-                <strong>{{ $author->contents_count }}</strong>
-              </a>
-            @endif
+          @foreach($authors->filter(fn ($author) => filled($author->handle))->values() as $author)
+            <a href="{{ route('profiles.show', $author) }}" data-collapsible-item @if($loop->iteration > 3) hidden @endif>
+              <span>{{ $author->display_name }}</span>
+              <strong>{{ $author->contents_count }}</strong>
+            </a>
           @endforeach
           @if($authors->count() > 3)
             <button class="side-list__more" type="button" data-collapsible-toggle>もっと表示する</button>

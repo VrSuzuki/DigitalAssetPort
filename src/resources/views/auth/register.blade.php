@@ -11,7 +11,7 @@
       @include('partials.flash')
       @include('partials.errors')
       <a class="social-auth-button" href="{{ route('auth.google.redirect') }}">
-        <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
+        <img class="social-auth-button__icon" src="{{ asset('assets/icons/google-g.svg') }}" alt="" aria-hidden="true">
         Googleアカウントで登録
       </a>
       <div class="auth-divider"><span>またはメールアドレスで登録</span></div>
