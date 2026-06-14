@@ -27,7 +27,10 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 <img width="1599" height="2404" alt="1_トップページ" src="https://github.com/user-attachments/assets/5596b223-017d-40f4-a028-d644a1ffdc92" />
 
 ## 動作風景
-https://youtu.be/vCpvSRH-AgY  
+[!['DigitalAssetPort紹介動画']('https://www.youtube.com/watch?v=vCpvSRH-AgY')]('https://www.youtube.com/watch?v=vCpvSRH-AgY')
+
+
+
 
 ## 主な機能
 
