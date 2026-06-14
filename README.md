@@ -26,6 +26,9 @@ DigitalAssetPort は、テンプレート、教材、コード、画像、音声
 [画面のスクリーンショット一覧はこちら](/ScreenShotTable.md)
 <img width="1599" height="2404" alt="1_トップページ" src="https://github.com/user-attachments/assets/5596b223-017d-40f4-a028-d644a1ffdc92" />
 
+## 動作風景
+https://youtu.be/vCpvSRH-AgY  
+
 ## 主な機能
 
 - Laravel Fortify による会員登録、ログイン、ログアウト、メール認証、パスワード再設定
