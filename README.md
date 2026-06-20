@@ -68,10 +68,6 @@ cp src/.env.example src/.env
 docker compose exec php php artisan key:generate
 docker compose exec php php artisan storage:link
 docker compose exec php php artisan migrate:fresh --seed
-```
-もしもブラウザ(`http://localhost/`)にて権限に関するエラーが表示されていた場合は以下のコマンドを「DisitalAssetPort」ディレクトリ直下で実行してみてください。
-
-```
 docker compose exec php chmod -R 775 storage bootstrap/cache
 docker compose exec php chown -R www-data:www-data storage bootstrap/cache
 ```
