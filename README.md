@@ -67,9 +67,9 @@ docker compose exec php composer install
 cp src/.env.example src/.env
 docker compose exec php php artisan key:generate
 docker compose exec php php artisan storage:link
-docker compose exec php php artisan migrate:fresh --seed
 docker compose exec php chmod -R 775 storage bootstrap/cache
 docker compose exec php chown -R www-data:www-data storage bootstrap/cache
+docker compose exec php php artisan migrate:fresh --seed
 ```
 
 ## サンプルアカウント
